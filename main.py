@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # Create the main window
     root = tk.Tk()
     # Hide the main window
-    root.withdraw()
+    #root.withdraw()
 
     # Ask for the password
     password = simpledialog.askstring("Password Required", "Please enter your password:", show='*')
