@@ -5,7 +5,9 @@ import os
 from textblob import TextBlob
 import json
 from datetime import datetime
+from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 PASSWORD_FILE = "pass.txt"
 JOURNAL_FILE = "journal.json"
@@ -48,7 +50,7 @@ def save_entry(text, mood, tags):
     with open(JOURNAL_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
-# --- Show Mood Trend ---
+# --- Show Mood Trend embedded in Tkinter ---
 def show_mood_trend():
     if not os.path.exists(JOURNAL_FILE):
         messagebox.showinfo("No Data", "No journal entries found.")
@@ -65,18 +67,30 @@ def show_mood_trend():
         messagebox.showinfo("No Data", "No mood data to display.")
         return
 
-    dates = [entry['date'] for entry in data]
+    # Extract dates and moods, convert date strings to datetime objects for better x-axis formatting
+    from datetime import datetime as dt
+    dates = [dt.strptime(entry['date'], "%Y-%m-%d %H:%M") for entry in data]
     moods = [entry['mood'] for entry in data]
 
-    plt.figure(figsize=(10, 4))
-    plt.plot(dates, moods, marker='o', linestyle='-', color='royalblue')
-    plt.title("Mood Trend Over Time")
-    plt.xlabel("Date")
-    plt.ylabel("Mood Score")
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-    plt.grid(True)
-    plt.show()
+    # Create a new Toplevel window
+    trend_win = tk.Toplevel(root)
+    trend_win.title("Mood Trend Over Time")
+    trend_win.geometry("800x500")
+
+    # Create matplotlib figure and axis
+    fig, ax = plt.subplots(figsize=(8, 4), dpi=100)
+    ax.plot(dates, moods, marker='o', linestyle='-', color='royalblue')
+    ax.set_title("Mood Trend Over Time")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Mood Score")
+    fig.autofmt_xdate(rotation=45)
+    ax.grid(True)
+    fig.tight_layout()
+
+    # Embed plot in Tkinter canvas
+    canvas = FigureCanvasTkAgg(fig, master=trend_win)
+    canvas.draw()
+    canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
 # --- View Past Entries ---
 def view_entries(filter_tag=None):
@@ -95,7 +109,6 @@ def view_entries(filter_tag=None):
         messagebox.showinfo("No Data", "No entries to display.")
         return
 
-    # Filter by tag if provided
     if filter_tag:
         filtered = []
         for entry in data:
@@ -108,12 +121,11 @@ def view_entries(filter_tag=None):
         messagebox.showinfo("No Entries", f"No entries found with tag '{filter_tag}'.")
         return
 
-    # Create a new window
     entries_win = tk.Toplevel(root)
     entries_win.title(f"Journal Entries - Tag: '{filter_tag or 'All'}'")
     entries_win.geometry("700x400")
 
-    st = scrolledtext.ScrolledText(entries_win, wrap=tk.WORD, font=("Arial", 10))
+    st = scrolledtext.ScrolledText(entries_win, wrap=tk.WORD, font=("Georgia", 12))
     st.pack(expand=True, fill=tk.BOTH)
 
     for entry in reversed(data):
@@ -136,8 +148,8 @@ def filter_entries_by_tag():
     tag_win = tk.Toplevel(root)
     tag_win.title("Filter by Tag")
 
-    tk.Label(tag_win, text="Enter a tag to filter by (leave blank for all):").pack(padx=10, pady=10)
-    tag_entry = tk.Entry(tag_win, width=30)
+    tk.Label(tag_win, text="Enter a tag to filter by (leave blank for all):", font=("Georgia", 12)).pack(padx=10, pady=10)
+    tag_entry = tk.Entry(tag_win, width=30, font=("Georgia", 12))
     tag_entry.pack(padx=10, pady=(0,10))
 
     def show_filtered():
@@ -145,7 +157,7 @@ def filter_entries_by_tag():
         tag_win.destroy()
         view_entries(filter_tag=tag)
 
-    tk.Button(tag_win, text="Filter", command=show_filtered).pack(pady=(0,10))
+    tk.Button(tag_win, text="Filter", font=("Georgia", 12), command=show_filtered).pack(pady=(0,10))
 
 # --- GUI Logic ---
 def submit_entry():
@@ -170,7 +182,7 @@ def submit_entry():
         mood_msg += "You sound great! Keep riding that wave. 🌈"
 
     mood_label.config(text=f"Latest Mood Score: {mood:.2f}")
-    messagebox.showinfo("Mood Mirror", mood_msg)
+    quote_label.config(text=mood_msg)
     entry.delete("1.0", tk.END)
     tags_entry.delete(0, tk.END)
 
@@ -201,25 +213,43 @@ def authenticate():
 root = tk.Tk()
 root.title("Mood Mirror Journal")
 
+# Full screen background setup
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+root.geometry(f"{screen_width}x{screen_height}")
+
+bg_image = Image.open("aurora_background.jpg")
+bg_image = bg_image.resize((screen_width, screen_height), Image.LANCZOS)
+bg_photo = ImageTk.PhotoImage(bg_image)
+
+bg_label = tk.Label(root, image=bg_photo)
+bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+main_frame = tk.Frame(root, bg="#00004B", bd=0)
+main_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
 if authenticate():
-    tk.Label(root, text="How are you feeling today? Write it down.").pack(pady=10)
-    entry = tk.Text(root, height=10, width=60)
+    tk.Label(main_frame, text="How are you feeling today? Write it down.", font=("Georgia", 18), fg="white", bg="#00004B").pack(pady=10)
+    entry = tk.Text(main_frame, height=10, width=60, font=("Georgia", 16))
     entry.pack()
 
-    tk.Label(root, text="Add tags (comma separated):").pack(pady=(10,0))
-    tags_entry = tk.Entry(root, width=60)
+    tk.Label(main_frame, text="Add tags (comma separated):", font=("Georgia", 15), fg="white", bg="#00004B").pack(pady=(10,0))
+    tags_entry = tk.Entry(main_frame, width=60, font=("Georgia", 14))
     tags_entry.pack()
 
-    submit_btn = tk.Button(root, text="Reflect", command=submit_entry)
+    submit_btn = tk.Button(main_frame, text="Reflect", font=("Georgia", 15), command=submit_entry)
     submit_btn.pack(pady=5)
 
-    mood_label = tk.Label(root, text="Latest Mood Score: --")
+    mood_label = tk.Label(main_frame, text="Latest Mood Score: --", font=("Georgia", 14), fg="white", bg="#00004B")
     mood_label.pack(pady=2)
 
-    trend_btn = tk.Button(root, text="See Mood Trend", command=show_mood_trend)
+    quote_label = tk.Label(main_frame, text="", font=("Georgia", 13, "italic"), fg="#FFD700", bg="#00004B", wraplength=500, justify="center")
+    quote_label.pack(pady=(10,15))
+
+    trend_btn = tk.Button(main_frame, text="See Mood Trend", font=("Georgia", 15), command=show_mood_trend)
     trend_btn.pack(pady=5)
 
-    view_btn = tk.Button(root, text="View Entries", command=filter_entries_by_tag)
+    view_btn = tk.Button(main_frame, text="View Entries", font=("Georgia", 15), command=filter_entries_by_tag)
     view_btn.pack(pady=5)
 
     root.mainloop()
