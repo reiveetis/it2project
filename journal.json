@@ -1,176 +1,49 @@
 [
   {
-    "date": "2025-06-07 16:35",
-    "text": "i'm feeling full of energy but also a bit overwhelmed by everything that happened today",
-    "mood": 0.35
-  },
-  {
-    "date": "2025-06-07 16:36",
-    "text": "sooo tired",
-    "mood": -0.4
-  },
-  {
-    "date": "2025-06-07 16:36",
-    "text": "full of energy amd soo happy!",
-    "mood": 0.675
-  },
-  {
-    "date": "2025-06-07 16:43",
-    "text": "overwhelmed",
-    "mood": 0.0
-  },
-  {
-    "date": "2025-06-07 16:45",
-    "text": "overwhelmed",
-    "mood": 0.0
-  },
-  {
-    "date": "2025-06-07 16:46",
-    "text": "overwhelmed",
-    "mood": 0.0
-  },
-  {
-    "date": "2025-06-07 16:47",
-    "text": "cool as cucumber",
-    "mood": 0.35
-  },
-  {
-    "date": "2025-06-07 16:47",
-    "text": "cool",
-    "mood": 0.35
-  },
-  {
-    "date": "2025-06-07 16:48",
-    "text": "happy",
-    "mood": 0.8
-  },
-  {
-    "date": "2025-06-07 16:53",
-    "text": "fine, thanks",
-    "mood": 0.30833333333333335
-  },
-  {
-    "date": "2025-06-07 16:56",
-    "text": "ok, thanks",
-    "mood": 0.35
-  },
-  {
-    "date": "2025-06-07 17:01",
-    "text": "fine",
-    "mood": 0.4166666666666667
-  },
-  {
-    "date": "2025-06-07 17:11",
-    "text": "nagut",
-    "mood": 0.0,
-    "tags": [
-      "home",
-      "school",
-      "work"
-    ]
-  },
-  {
-    "date": "2025-06-07 17:14",
-    "text": "happi happi",
-    "mood": 0.0,
-    "tags": [
-      "school"
-    ]
-  },
-  {
-    "date": "2025-06-07 17:18",
-    "text": "fine",
-    "mood": 0.4166666666666667,
-    "tags": [
-      "acta x"
-    ]
-  },
-  {
-    "date": "2025-06-07 17:22",
-    "text": "welcome",
-    "mood": 0.8,
-    "tags": [
-      "acta x"
-    ]
-  },
-  {
-    "date": "2025-06-14 18:27",
-    "text": "cool",
-    "mood": 0.35,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:31",
-    "text": "nice",
-    "mood": 0.6,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:32",
-    "text": "with a heavy heart",
+    "date": "2025-06-14 20:36",
+    "text": "shit",
     "mood": -0.2,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:33",
-    "text": "fine",
-    "mood": 0.4166666666666667,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:34",
-    "text": "good",
-    "mood": 0.7,
     "tags": [
-      "cope"
+      "a",
+      "b",
+      "c",
+      "d"
     ]
   },
   {
-    "date": "2025-06-14 18:36",
-    "text": "ice ice baby",
-    "mood": 0.0,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:36",
-    "text": "good",
-    "mood": 0.7,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:37",
-    "text": "fine",
-    "mood": 0.4166666666666667,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:39",
-    "text": "fine",
-    "mood": 0.4166666666666667,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:40",
-    "text": "nice",
-    "mood": 0.6,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:41",
-    "text": "not bad",
-    "mood": 0.3499999999999999,
-    "tags": []
-  },
-  {
-    "date": "2025-06-14 18:41",
+    "date": "2025-06-14 20:36",
     "text": "bad",
     "mood": -0.6999999999999998,
     "tags": []
   },
   {
-    "date": "2025-06-14 18:47",
-    "text": "nice",
-    "mood": 0.6,
+    "date": "2025-06-14 20:37",
+    "text": "bad shit",
+    "mood": -0.44999999999999996,
+    "tags": []
+  },
+  {
+    "date": "2025-06-14 20:37",
+    "text": "bad shit awful",
+    "mood": -0.6333333333333333,
+    "tags": []
+  },
+  {
+    "date": "2025-06-14 20:37",
+    "text": "bad shit awful tired",
+    "mood": -0.575,
+    "tags": []
+  },
+  {
+    "date": "2025-06-14 20:37",
+    "text": "awful",
+    "mood": -1.0,
+    "tags": []
+  },
+  {
+    "date": "2025-06-14 20:37",
+    "text": "tired",
+    "mood": -0.4,
     "tags": []
   },
   {
