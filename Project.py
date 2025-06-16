@@ -12,14 +12,19 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 PASSWORD_FILE = "pass.txt"
 JOURNAL_FILE = "journal.json"
 
-# --- Authentication ---
+
+# create hash from string
 def hash_password(password):
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
+
+# write hashed password to file
 def set_password(new_password):
     with open(PASSWORD_FILE, "w") as f:
         f.write(hash_password(new_password))
 
+
+# check string with hashed password
 def check_password(password_attempt):
     if not os.path.exists(PASSWORD_FILE):
         return None
@@ -27,12 +32,14 @@ def check_password(password_attempt):
         stored_hash = f.read().strip()
     return stored_hash == hash_password(password_attempt)
 
-# --- Sentiment Analysis ---
+
+# analyze the entered text with TextBlob
 def analyze_sentiment(text):
     blob = TextBlob(text)
     return blob.sentiment.polarity
 
-# --- Save Entry ---
+
+# write entry to file
 def save_entry(text, mood, tags):
     date_str = datetime.now().strftime("%Y-%m-%d %H:%M")
     tag_list = [tag.strip() for tag in tags.split(",") if tag.strip()]
@@ -50,7 +57,7 @@ def save_entry(text, mood, tags):
     with open(JOURNAL_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
-# --- Show Mood Trend embedded in Tkinter ---
+
 def show_mood_trend():
     if not os.path.exists(JOURNAL_FILE):
         messagebox.showinfo("No Data", "No journal entries found.")
@@ -67,17 +74,17 @@ def show_mood_trend():
         messagebox.showinfo("No Data", "No mood data to display.")
         return
 
-    # Extract dates and moods, convert date strings to datetime objects for better x-axis formatting
+    # extract dates and moods, convert date strings to datetime objects for better x-axis formatting
     from datetime import datetime as dt
     dates = [dt.strptime(entry['date'], "%Y-%m-%d %H:%M") for entry in data]
     moods = [entry['mood'] for entry in data]
 
-    # Create a new Toplevel window
+    # create a new toplevel window
     trend_win = tk.Toplevel(root)
     trend_win.title("Mood Trend Over Time")
     trend_win.geometry("800x500")
 
-    # Create matplotlib figure and axis
+    # create matplotlib figure and axis
     fig, ax = plt.subplots(figsize=(8, 4), dpi=100)
     ax.plot(dates, moods, marker='o', linestyle='-', color='royalblue')
     ax.set_title("Mood Trend Over Time")
@@ -87,12 +94,13 @@ def show_mood_trend():
     ax.grid(True)
     fig.tight_layout()
 
-    # Embed plot in Tkinter canvas
+    # embed plot in tkinter canvas
     canvas = FigureCanvasTkAgg(fig, master=trend_win)
     canvas.draw()
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
-# --- View Past Entries ---
+
+# show entry list
 def view_entries(filter_tag=None):
     if not os.path.exists(JOURNAL_FILE):
         messagebox.showinfo("No Data", "No journal entries found.")
@@ -143,7 +151,8 @@ def view_entries(filter_tag=None):
 
     st.config(state=tk.DISABLED)
 
-# --- Filter Entries by Tag ---
+
+# filter entries by entered tag
 def filter_entries_by_tag():
     tag_win = tk.Toplevel(root)
     tag_win.title("Filter by Tag")
@@ -159,7 +168,7 @@ def filter_entries_by_tag():
 
     tk.Button(tag_win, text="Filter", font=("Georgia", 12), command=show_filtered).pack(pady=(0,10))
 
-# --- GUI Logic ---
+
 def submit_entry():
     text = entry.get("1.0", tk.END)
     tags = tags_entry.get()
@@ -186,7 +195,8 @@ def submit_entry():
     entry.delete("1.0", tk.END)
     tags_entry.delete(0, tk.END)
 
-# --- Ask for Password ---
+
+# handle password logic
 def authenticate():
     if not os.path.exists(PASSWORD_FILE):
         pw = simpledialog.askstring("Set Password", "Create your Mood Mirror password:", show='*')
@@ -209,14 +219,15 @@ def authenticate():
     root.destroy()
     return False
 
-# --- Build GUI ---
+
 root = tk.Tk()
 root.title("Mood Mirror Journal")
 
-# Full screen background setup
+# full screen background setup
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.geometry(f"{screen_width}x{screen_height}")
+root.state('zoomed')
 
 bg_image = Image.open("aurora_background.jpg")
 bg_image = bg_image.resize((screen_width, screen_height), Image.LANCZOS)
@@ -237,14 +248,14 @@ if authenticate():
     tags_entry = tk.Entry(main_frame, width=60, font=("Georgia", 14))
     tags_entry.pack()
 
-    submit_btn = tk.Button(main_frame, text="Reflect", font=("Georgia", 15), command=submit_entry)
+    submit_btn = tk.Button(main_frame, text="Add Entry", font=("Georgia", 15), command=submit_entry)
     submit_btn.pack(pady=5)
 
     mood_label = tk.Label(main_frame, text="Latest Mood Score: --", font=("Georgia", 14), fg="white", bg="#00004B")
     mood_label.pack(pady=2)
 
     quote_label = tk.Label(main_frame, text="", font=("Georgia", 13, "italic"), fg="#FFD700", bg="#00004B", wraplength=500, justify="center")
-    quote_label.pack(pady=(10,15))
+    quote_label.pack(pady=(10, 15))
 
     trend_btn = tk.Button(main_frame, text="See Mood Trend", font=("Georgia", 15), command=show_mood_trend)
     trend_btn.pack(pady=5)
