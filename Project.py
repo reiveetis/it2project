@@ -4,7 +4,7 @@ import hashlib
 import os
 from textblob import TextBlob
 import json
-from datetime import datetime
+from datetime import datetime as dt
 from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -41,7 +41,7 @@ def analyze_sentiment(text):
 
 # write entry to file
 def save_entry(text, mood, tags):
-    date_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+    date_str = dt.now().strftime("%Y-%m-%d %H:%M")
     tag_list = [tag.strip() for tag in tags.split(",") if tag.strip()]
     entry = {"date": date_str, "text": text.strip(), "mood": mood, "tags": tag_list}
     data = []
@@ -75,7 +75,6 @@ def show_mood_trend():
         return
 
     # extract dates and moods, convert date strings to datetime objects for better x-axis formatting
-    from datetime import datetime as dt
     dates = [dt.strptime(entry['date'], "%Y-%m-%d %H:%M") for entry in data]
     moods = [entry['mood'] for entry in data]
 
